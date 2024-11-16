@@ -34,10 +34,55 @@
 
 // ########## style ########## //
 
-const header = document.querySelector(".header");
+// const header = document.querySelector(".header");
 // header.style.backgroundColor = "green";
 // header.style.color = "purple";
 
 // ########## classList ########## //
 
-header.classList.add("brown", "container");
+// header.classList.add("brown", "container");
+// console.log(header.classList);
+
+// ########## getAttribute ########## //
+// const image = document.querySelector(".santa");
+// const altText = image.getAttribute("alt");
+// console.log("alt:", altText);
+
+// ########## setAttribute ########## //
+// image.setAttribute("alt", "just a regular santa");
+// const altText = image.getAttribute("alt");
+// console.log(altText);
+
+// ########## removeAttribute ########## //
+// image.removeAttribute("alt");
+
+// ########## insertAdjecentElement ########## //
+// const section = document.createElement("section");
+// section.innerText = "This is a section.";
+
+// const main = document.querySelector("main");
+
+// main.insertAdjacentElement("beforebegin", section);
+// main.insertAdjacentElement("afterend", section);
+// main.insertAdjacentElement("afterbegin", section);
+// main.insertAdjacentElement("beforeend", section);
+
+// ########## innerHTML ########## //
+// const articleAsAString = "<article>This is an article</article>";
+// console.log(articleAsAString);
+
+// const main = document.querySelector("main");
+// // main.innerHTML = articleAsAString;
+// main.innerHTML += articleAsAString;
+
+// ########## insertAdjacentHTML ########## //
+
+const section = `
+    <section class="section">
+        <p>This is a paragraph inside the section</p>
+    </section>
+`;
+
+const main = document.querySelector("main");
+main.insertAdjacentHTML("beforebegin", section);
+main.insertAdjacentHTML("beforeend", section);
