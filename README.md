@@ -1,6 +1,8 @@
 # HTML/CSS_Intro-DOM
 Repetition of HTML &amp; CSS and a intro to DOM-manipulation
 
+# Repetition of HTML & CSS and a intro to DOM-manipulation
+
 <details open>
 <summary>Table of content</summary>
 
@@ -521,13 +523,274 @@ image.removeAttribute("alt");
 
 ## Event Handling
 
+Event is just something that happens when a user interacts with a application or website. It's called that an event is triggered when you do something. It could be a click, an input change somewhere, maybe a hover on some part of the application that shows some content and so on. These are all events that we can handle with javascript, and do different things, run some code maybe.
+
+The most common event is by far the click-event, but there are over a 100 different kinds of events, here is a complete list of them all: [W3Schools - list of DOM events](https://www.w3schools.com/jsref/dom_obj_event.asp).
+
+[Back to top](#repetition-of-html--css-and-a-intro-to-dom-manipulation)
+
+### addEventListener(event, callback, useCapture?) => void
+
+This method is used to add an event listener to a HTML element and it's available on every HTML element there is. You just need a reference to the specific element and then you can add the listener.
+
+Three parameters:
+
+- **event**: a string representation of the event you want to listen to. Could be a `"click"` event, a `"input"` event or some other event. Check the list above for all the events.
+
+- **callback**: this is the function that will run whenever the specified event has been triggered. The callback ALWAYS have access to the **_event object_** that is created by JavaScript in order to capture information about the said event.
+
+- **useCapture**: optional configuration weather the event should be triggered in the bubbling phase or the capture phase. This is beyond the scope of the course, but you can read about it here: [Understanding the useCapture Parameter in addEventListener](https://dnmtechs.com/understanding-the-usecapture-parameter-in-addeventlistener/).
+
+[Back to top](#repetition-of-html--css-and-a-intro-to-dom-manipulation)
+
+#### Syntax of an eventListener
+
+```html
+<button class="btn">Click me</button>
+```
+
+```js
+// First step - create reference to the element
+const button = document.querySelector(".btn");
+
+// Secont step - add the event listener to the element and create the logic
+button.addEventListener("click", (event) => {
+  // code to execute when the click event was triggered on the button element.
+});
+```
+
+This syntax is just one of, I think, three different ones. But this is the most dynamic one to use of several different reasons, but we are not going to explore them. Just accept that this is the best syntax.
+
 [Back to top](#repetition-of-html--css-and-a-intro-to-dom-manipulation)
 
 ### Click
 
+Click is by far the most common event when it comes to web applications. Let's try it out by creating button in our HTML and then registering a click event on it.
+
+#### Basic example
+
+```html
+<button class="btn">Click me to get presents</button>
+```
+
+```js
+const button = document.querySelector(".btn");
+
+button.addEventListener("click", (event) => {
+  console.log("The button has been clicked.");
+});
+```
+
+This will just log a text to the console. Not very funny but it shows that it works.
+
+Let's do another example, let's create a another button on which we change the text every time we click on it.
+
+```html
+<button class="btn1">Click me to change this text</button>
+```
+
+```js
+const button1 = document.querySelector(".btn1");
+
+button1.addEventListent("click", (event) => {
+  button1.innerText = "Now I have a new text!";
+});
+```
+
+This will change the text in the button on the first click. On the second click nothing will happen because the text has already been changed. In reality, the code is invoked again but since we are updating to the same thing, we won't see anything in the browser.
+
+[Back to top](#repetition-of-html--css-and-a-intro-to-dom-manipulation)
+
+#### Change content with Click
+
+We could add a if check to see what the content is, and from there change it accordingly.
+
+```js
+button1.addEventListent("click", (event) => {
+  const innerText = button1.innerText;
+
+  if (innerText === "Click me to change this text") {
+    button1.innerText = "Now I have a new text!";
+  } else {
+    button1.innerText = "Click me to change this text";
+  }
+});
+```
+
+This example is a bit more useful since we can change the text back and forth.
+
+[Back to top](#repetition-of-html--css-and-a-intro-to-dom-manipulation)
+
+#### Show and hide content with Click
+
+In this case we will have some sort of content that will be hidden by default, and by clicking on a button, this hidden content will be revealed. Here is the HTML for this example:
+
+_index.html_
+
+```html
+<nav class="navbar">
+  <button class="link-btn">Show links</button>
+  <div class="links close">
+    <a class="home" href="#">Home</a>
+    <a class="about" href="#">About</a>
+    <a class="contact" href="#">Contact</a>
+  </div>
+</nav>
+```
+
+What I have also done, is to add some styling to this specific HTML:
+
+_index.css_
+
+```css
+.navbar {
+  display: flex;
+  gap: 2rem;
+}
+
+.links {
+  display: block;
+}
+
+.links.close {
+  display: none;
+}
+```
+
+This styling just flexes the navbar container and make sures that the links element is hidden by default with the help of the close-class. What we want to do here, is to remove the close-class on the click in order for the links element to be visible again.
+
+_events.js_
+
+```js
+const linkButton = document.querySelector(".link-btn");
+const linkDiv = document.querySelector(".links");
+
+linkButton.addEventListener("click", () => {
+  // No need for the event object.
+
+  if (linkDiv.classList.contains("close")) {
+    linkDiv.classList.remove("close");
+    linkButton.innerText = "Hide Links";
+  } else {
+    linkDiv.classList.add("close");
+    linkButton.innerText = "Show Links";
+  }
+});
+```
+
+So, this code above, first it create the references to the elements we want to interact with. Then we register the event listener on the button and the create the logic.
+
+The logic removes or adds the class `close` on the links-element, and changes the text on the button depending on if the links are hidden or not.
+
 [Back to top](#repetition-of-html--css-and-a-intro-to-dom-manipulation)
 
 ### Input
+
+This event is connected to input elements. It will be triggered everytime you type in a character in an input field. We can listen to this event and execute some code. For instance, we could just log the content of the input field to the console.
+
+Let's create some html:
+
+_index.html_
+
+```html
+<div class="input-wrapper">
+  <label for="wish">What's your wish?</label>
+  <input id="wish" type="text" />
+</div>
+```
+
+So now we can register an input event on the input element and console.log the value of the input to the console.
+
+_events.js_
+
+```js
+const input = document.querySelector(".input-wrapper input");
+
+input.addEventListener("input", (event) => {
+  const value = event.target.value;
+  console.log(value);
+});
+```
+
+This will just log the value of the input to the console every time we type in a character inside the input field. but we can do so much more with this. For exampel, let's validate the input. So if the value of the input is longer than 7 characters, we can do something. Let's for instance update the border color of the input field. We need some css for this:
+
+_index.css_
+
+```css
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
+.input-wrapper.error {
+  border-color: red;
+}
+
+.input-wrapper.valid {
+  border-color: green;
+}
+```
+
+And then the code:
+
+_events.js_
+
+```js
+const fieldset = document.querySelector(".input-wrapper");
+const input = document.querySelector(".input-wrapper input");
+
+input.addEventListener("input", (event) => {
+  const value = event.target.value;
+
+  if (inputIsValid(value)) {
+    fieldset.classList.add("valid");
+    fieldset.classList.remove("error");
+  } else {
+    fieldset.classList.remove("valid");
+    fieldset.classList.add("error");
+  }
+});
+
+function inputIsValid(value) {
+  return value.length >= 7;
+}
+
+// Alternative version with a arrow function with implicit return.
+const inputIsValidAlt = (value) => value.length >= 7;
+```
+
+This worked just fine, the border of the fieldset will be updated depending on if the value is valid or not. We could expand this example and add some feedback text aswell. We must add some html and css in order to make this work.
+
+_index.html_
+
+```html
+<fieldset class="input-wrapper">
+  <label for="wish">What's your wish?</label>
+  <input id="wish" type="text" />
+  <p class="feedback">Input must be longer than 7 characters...</p>
+</fieldset>
+```
+
+_index.css_
+
+```css
+.input-wrapper .feedback {
+  display: none;
+  color: red;
+  margin: 0;
+}
+
+.input-wrapper.error .feedback {
+  display: block;
+}
+```
+
+And we actually don't have to update the code since the visibility of the feedback element is based on pure css classes.
 
 [Back to top](#repetition-of-html--css-and-a-intro-to-dom-manipulation)
 
